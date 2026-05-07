@@ -1,22 +1,37 @@
 # Three.js Production Example
 
-TDD-validated Three.js r183+ production patterns with 21 passing tests.
+TDD-validated Three.js r183+ production patterns with 21 passing tests. This repo also contains the `threejs-production` and `threejs-interaction` Hermes skills as subdirectories.
 
-## Patterns Implemented
+## Repository Structure
 
-- **Timer-based animation** — `THREE.Timer` replaces deprecated `THREE.Clock`
-- **GPU resource disposal** — proper `geometry.dispose()` → textures → material → scene removal order
-- **Responsive canvas** — DPR clamping to 2, aspect ratio + `updateProjectionMatrix` on resize
-- **OrbitControls damping** — `enableDamping: true` + `update()` called every frame
-- **SRGBColorSpace** — `renderer.outputColorSpace = THREE.SRGBColorSpace` (r152+)
-- **Frame-independent animation** — delta-time based rotation for consistent speed across frame rates
-- **Animation loop** — `renderer.setAnimationLoop()` (handles tab visibility, XR)
+```
+threejs-production-example/
+├── skills/
+│   ├── threejs-production/      # Hermes skill: r183+ production patterns
+│   │   └── SKILL.md
+│   └── threejs-interaction/     # Hermes skill: mobile touch debugging
+│       ├── SKILL.md
+│       ├── references/
+│       └── scripts/
+├── src/
+│   ├── scene-manager.js          # Implementation (r183+ patterns)
+│   ├── scene-manager.test.js     # 21 TDD tests
+│   └── vitest-setup.mjs          # Legacy WebGL mock
+├── vitest.config.js
+└── package.json
+```
 
-## Tech Stack
+## Skills
 
-- **three.js** r184
-- **Vitest** v3.2.4 (jsdom environment, `vi.mock('three')`)
-- **Node.js** 22 / ESM modules
+### `skills/threejs-production/` — r183+ Production Patterns
+
+Timer-based animation, GPU disposal, responsive canvas, OrbitControls damping, SRGBColorSpace, WebGPU, TSL, RenderPipeline, and **TDD testing patterns** (Vitest `vi.mock('three')`).
+
+### `skills/threejs-interaction/` — Mobile Touch Debugging
+
+Playwright headless testing for mobile touch, OrbitControls event-fix, `touchstart preventDefault` debugging.
+
+> **r183+ note:** For Timer/`setAnimationLoop` patterns, see `skills/threejs-production/SKILL.md`.
 
 ## Run Tests
 
@@ -25,16 +40,15 @@ npm install
 npm test
 ```
 
-## File Structure
+## Patterns Implemented
 
-```
-src/
-  scene-manager.js        # Implementation (r183+ patterns)
-  scene-manager.test.js   # 21 TDD tests — RED/GREEN/REFACTOR cycle
-  vitest-setup.mjs        # WebGL mock (legacy, superseded by vi.mock)
-vitest.config.js
-package.json
-```
+- **Timer-based animation** — `THREE.Timer` replaces deprecated `THREE.Clock`
+- **GPU resource disposal** — proper `geometry.dispose()` → textures → material → scene removal order
+- **Responsive canvas** — DPR clamping to 2, aspect ratio + `updateProjectionMatrix` on resize
+- **OrbitControls damping** — `enableDamping: true` + `update()` called every frame
+- **SRGBColorSpace** — `renderer.outputColorSpace = THREE.SRGBColorSpace` (r152+)
+- **Frame-independent animation** — delta-time based rotation for consistent speed
+- **Animation loop** — `renderer.setAnimationLoop()` (handles tab visibility, XR)
 
 ## Three.js r183+ Key Changes
 
@@ -46,14 +60,8 @@ package.json
 | raw `requestAnimationFrame` | `renderer.setAnimationLoop()` | r183 |
 | `EffectComposer` | `RenderPipeline` | r183 |
 
-## Testing Approach
+## Tech Stack
 
-Tests use **full `THREE` mocking via `vi.mock('three')`** — no WebGL context, no jsdom canvas polyfill. Each test is isolated with `vi.resetAllMocks()` and re-applies default mock return values in `beforeEach`.
-
-See `src/scene-manager.test.js` for all 21 tests covering:
-- Timer instantiation and frame count tracking
-- Disposal order (geometry → texture maps → material → scene)
-- Responsive canvas with DPR clamping
-- OrbitControls damping enable/disable
-- SRGBColorSpace assignment
-- Frame-independent animation via delta-time rotation
+- **three.js** r184
+- **Vitest** v3.2.4 (jsdom environment, `vi.mock('three')`)
+- **Node.js** 22 / ESM modules
