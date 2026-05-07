@@ -1,0 +1,17 @@
+{
+  "name": "threejs-production-example",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "canvas": "0.0.0-7",
+    "jsdom": "^25.0.0",
+    "vitest": "^3.0.0"
+  }
+}
